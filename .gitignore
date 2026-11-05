@@ -1,0 +1,17 @@
+# Dependencias globales y de subcarpetas
+node_modules/
+client/node_modules/
+server/node_modules/
+
+# Archivos de entorno
+.env
+client/.env
+server/.env
+
+# Compilación y builds
+dist/
+build/
+
+# Logs y sistema
+*.log
+.DS_Store
