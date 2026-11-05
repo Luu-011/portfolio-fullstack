@@ -1,7 +1,3 @@
-//Es el login concreto: le dice al molde qué campos y validaciones usar, hace el login de verdad, 
-// limpia espacios del email, y tras entrar te lleva al panel de admin si eres admin, 
-// o de vuelta a la página que intentabas ver (o a /proyectos por defecto).
-
 import { useNavigate, useLocation } from 'react-router-dom'
 import AuthForm from './AuthForm'
 import { useAuth } from '../../hooks/useAuth'
@@ -24,7 +20,7 @@ export default function LoginForm() {
 
   const onSubmit = async (values) => {
     const user = await login({ email: values.email.trim(), password: values.password })
-    navigate(user.role === 'admin' ? '/admin' : from, { replace: true })
+    navigate(['admin', 'operator'].includes(user.role) ? '/admin' : from, { replace: true })
   }
 
   return <AuthForm fields={fields} validators={validators} submitLabel="Iniciar sesión" onSubmit={onSubmit} />

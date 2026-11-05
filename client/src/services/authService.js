@@ -2,8 +2,25 @@
 // de cada función por una llamada a la API (por ejemplo api.post('/auth/login', data)).
 // Las contraseñas NO deben guardarse así en producción: el backend usa bcrypt.
 const KEY = 'mock_users'
-const read = () => JSON.parse(localStorage.getItem(KEY) || '[]')
 const wait = (ms = 500) => new Promise((r) => setTimeout(r, ms))
+
+// Cuentas de prueba para probar los paneles
+const SEED = [
+  { id: 1, name: 'Administrador', email: 'admin@demo.com', password: 'Admin12345', role: 'admin' },
+  { id: 2, name: 'Operador', email: 'operador@demo.com', password: 'Operador123', role: 'operator' },
+]
+
+const read = () => {
+  const raw = localStorage.getItem(KEY)
+  const users = raw ? JSON.parse(raw) : []
+  const missing = SEED.filter((s) => !users.some((u) => u.email === s.email))
+  if (missing.length) {
+    const all = [...missing, ...users]
+    localStorage.setItem(KEY, JSON.stringify(all))
+    return all
+  }
+  return users
+}
 
 export async function register({ name, email, password }) {
   await wait()

@@ -40,3 +40,12 @@ export const validateImage = (file, { maxMB = 2, types = ['image/jpeg', 'image/p
   if (file.size > maxMB * 1024 * 1024) return `La imagen no puede superar ${maxMB} MB.`
   return ''
 }
+
+// Respuesta del operador a una consulta
+export const validateReply = (v = '') => {
+  const s = v.trim()
+  if (!s) return 'Escribe la respuesta.'
+  if (s.length < 10) return 'Escribe al menos 10 caracteres.'
+  if (s.length > 2000) return 'La respuesta no puede superar los 2000 caracteres.'
+  return ''
+}
