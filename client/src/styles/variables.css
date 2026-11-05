@@ -1,0 +1,36 @@
+/* Paleta y tipografía del manual de marca */
+:root {
+  /* Paleta */
+  --lavender-mist: #F7F0F5;
+  --pale-oak: #DECBB7;
+  --grey-olive: #8F857D;
+  --stone-brown: #5C5552;
+  --deep-mocha: #433633;
+
+  /* Roles */
+  --bg: var(--lavender-mist);
+  --surface: rgba(255, 255, 255, 0.55);
+  --line: rgba(222, 203, 183, 0.75);   /* Pale Oak translúcido */
+  --text: var(--stone-brown);
+  --heading: var(--deep-mocha);
+  --accent: var(--grey-olive);
+  --highlight: var(--pale-oak);
+
+  /* Tipografía */
+  --font-body: 'DM Sans', system-ui, sans-serif;
+  --font-title: 'Manrope', 'DM Sans', system-ui, sans-serif;
+  --font-code: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --radius: 14px;
+
+  /* Bootstrap: se pisan sus variables con la paleta */
+  --bs-body-bg: var(--bg);
+  --bs-body-color: var(--text);
+  --bs-body-font-family: var(--font-body);
+  --bs-border-color: var(--line);
+  --bs-link-color: var(--heading);
+  --bs-link-hover-color: var(--text);
+  --bs-danger: #8A3B35;
+  --bs-form-invalid-color: #8A3B35;
+  --bs-form-invalid-border-color: #8A3B35;
+}
