@@ -1,4 +1,5 @@
 -- Datos iniciales para desarrollo. Ejecutar DESPUÉS de schema.sql, una sola vez.
+SET NAMES utf8mb4;  -- los acentos se guardan bien sin importar el cliente que ejecute el archivo
 USE portfolio_db;
 
 -- Cuentas de prueba (las contraseñas están guardadas con bcrypt, nunca en texto plano)

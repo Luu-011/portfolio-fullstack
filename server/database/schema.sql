@@ -1,6 +1,7 @@
 -- Esquema de la base de datos del portfolio (MySQL 8)
 -- Ejecutar una vez. Si las tablas ya existen, no se pisan (CREATE ... IF NOT EXISTS).
 
+SET NAMES utf8mb4;  -- los acentos se guardan bien sin importar el cliente que ejecute el archivo
 CREATE DATABASE IF NOT EXISTS portfolio_db
   CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE portfolio_db;

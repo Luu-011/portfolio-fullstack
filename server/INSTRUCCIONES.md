@@ -1,12 +1,19 @@
-# Backend - tanda 1 (base de datos + registro y login)
+# Backend
 
-1. `cd server`
-2. `npm install`
-3. Copiá `.env.example` como `.env` y completá `DB_PASSWORD` (la contraseña de root de MySQL) y `JWT_SECRET`.
-4. En MySQL Workbench: File > Open SQL Script > `database/schema.sql` > ícono del rayo. Después lo mismo con `database/seed.sql`.
-5. `npm run dev` debe mostrar "Conectado a MySQL" y "API escuchando en http://localhost:4000".
-6. Probá http://localhost:4000/api/health en el navegador: debe responder {"ok":true}.
+## Tanda 1 (base de datos + registro y login)
+1. `cd server` y `npm install`
+2. Copiá `.env.example` como `.env` y completá `DB_PASSWORD` y `JWT_SECRET`.
+3. En MySQL Workbench ejecutá `database/schema.sql` y después `database/seed.sql` (una sola vez).
+4. `npm run dev` -> "Conectado a MySQL" y "API escuchando en http://localhost:4000".
 
-Cuentas de prueba (seed.sql):
-- admin@demo.com / Admin12345 (rol admin)
-- operador@demo.com / Operador123 (rol operator)
+Cuentas de prueba: admin@demo.com / Admin12345 · operador@demo.com / Operador123
+
+## Tanda 2 (contacto + email)
+- `npm install` (se suma `nodemailer`).
+- Sin tocar el `.env` funciona en MODO PRUEBA: los emails aparecen en la consola.
+- Para enviar emails reales completá en `.env`: `EMAIL_USER`, `EMAIL_PASS` (contraseña de aplicación de Gmail), `MAIL_FROM` y `OWNER_EMAIL`.
+
+Endpoints nuevos:
+- `POST /api/contacts` (público): { name, email, type, message }
+- `GET /api/contacts` (operador/admin, header Authorization: Bearer <token>), opcional `?status=pendiente`
+- `POST /api/contacts/:id/replies` (operador/admin): { text } -> envía el email y guarda la respuesta
