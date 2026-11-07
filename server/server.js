@@ -18,15 +18,15 @@ try {
   process.exit(1)
 }
 
-if (mailMode === 'smtp') {
+if (mailMode === 'test') {
+  console.log('Correo: MODO PRUEBA (los emails se muestran en la consola y no se envían)')
+} else {
   try {
     await verifyMailer()
-    console.log(`Correo: conectado como ${process.env.EMAIL_USER}`)
+    console.log(mailMode === 'brevo' ? 'Correo: Brevo (HTTPS) conectado' : `Correo: conectado como ${process.env.EMAIL_USER}`)
   } catch (err) {
     console.warn('Correo: no se pudo verificar la cuenta de email:', err.message)
   }
-} else {
-  console.log('Correo: MODO PRUEBA (los emails se muestran en la consola y no se envían)')
 }
 
 app.listen(PORT, () => console.log(`API escuchando en http://localhost:${PORT}`))

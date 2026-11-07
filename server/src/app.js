@@ -16,7 +16,11 @@ const app = express()
 // Necesario cuando la API está detrás de un proxy (Render, Vercel): así req.ip es la IP real del visitante
 app.set('trust proxy', 1)
 
-app.use(cors({ origin: process.env.CLIENT_URL || 'http://localhost:5173' }))
+// CLIENT_URL admite varios orígenes separados por coma (sin "/" al final):
+//   http://localhost:5173,https://tu-sitio.vercel.app
+const allowedOrigins = (process.env.CLIENT_URL || 'http://localhost:5173')
+  .split(',').map((o) => o.trim().replace(/\/$/, '')).filter(Boolean)
+app.use(cors({ origin: allowedOrigins }))
 app.use(express.json({ limit: '100kb' }))
 
 // Comprueba que la API y la base de datos responden
