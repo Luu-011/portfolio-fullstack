@@ -17,3 +17,15 @@ Endpoints nuevos:
 - `POST /api/contacts` (público): { name, email, type, message }
 - `GET /api/contacts` (operador/admin, header Authorization: Bearer <token>), opcional `?status=pendiente`
 - `POST /api/contacts/:id/replies` (operador/admin): { text } -> envía el email y guarda la respuesta
+
+## Tanda 3 (proyectos, demos y servicios)
+- `npm install` (se suma `multer`).
+- Agregá al `.gitignore` de la raíz:
+  `server/uploads/*` y `!server/uploads/.gitkeep` (las imágenes subidas no van a Git).
+
+Endpoints:
+- Servicios: `GET /api/services` (público, activos) · `GET /api/services/all` (admin) · `POST`, `PUT /:id`, `DELETE /:id` (admin)
+- Proyectos (requieren sesión): `GET /api/projects`, `GET /api/projects/:id`
+- Proyectos (admin): `POST /api/projects`, `PUT /api/projects/:id`, `DELETE /api/projects/:id` (multipart/form-data con campo `image` opcional: JPG, PNG o WebP, máx. 2 MB)
+- Demos (admin): `POST /api/projects/:id/demos`, `PUT` y `DELETE /api/projects/:id/demos/:demoId`
+- Imágenes: `GET /uploads/<archivo>`

@@ -15,3 +15,6 @@ build/
 # Logs y sistema
 *.log
 .DS_Store
+
+server/uploads/*
+!server/uploads/.gitkeep

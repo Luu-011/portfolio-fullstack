@@ -3,6 +3,9 @@ import cors from 'cors'
 import { pool } from './config/db.js'
 import authRoutes from './routes/authRoutes.js'
 import contactRoutes from './routes/contactRoutes.js'
+import projectRoutes from './routes/projectRoutes.js'
+import serviceRoutes from './routes/serviceRoutes.js'
+import { UPLOADS_DIR } from './utils/images.js'
 import { notFound, errorHandler } from './middlewares/errorHandler.js'
 
 const app = express()
@@ -23,8 +26,20 @@ app.get('/api/health', async (_req, res, next) => {
   }
 })
 
+// Imágenes subidas: se sirven como archivos estáticos, sin listado de carpeta
+app.use('/uploads', express.static(UPLOADS_DIR, {
+  index: false,
+  dotfiles: 'deny',
+  setHeaders: (res) => {
+    res.set('X-Content-Type-Options', 'nosniff')
+    res.set('Cross-Origin-Resource-Policy', 'cross-origin') // permite mostrarlas en el frontend (otro dominio)
+  },
+}))
+
 app.use('/api/auth', authRoutes)
 app.use('/api/contacts', contactRoutes)
+app.use('/api/projects', projectRoutes)
+app.use('/api/services', serviceRoutes)
 
 app.use(notFound)
 app.use(errorHandler)
