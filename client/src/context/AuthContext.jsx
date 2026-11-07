@@ -1,9 +1,3 @@
-//Es el **"cerebro de autenticación" de la app**: crea un **contexto global** (`AuthContext`) 
-// que guarda el usuario y expone las funciones `login`, `register` y `logout`, para que **cualquier componente**
-//  pueda saber si hay sesión iniciada y entrar/salir sin pasar props de padre a hijo. El usuario se guarda en **localStorage**
-//  (`auth_user`), así **la sesión sobrevive al recargar la página**; las funciones llaman al servicio real (`authService`) 
-// y actualizan el estado con el usuario devuelto.
-
 import { createContext } from 'react'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import * as authService from '../services/authService'
@@ -25,7 +19,10 @@ export function AuthProvider({ children }) {
     return newUser
   }
 
-  const logout = () => setUser(null)
+  const logout = () => {
+    authService.logout()
+    setUser(null)
+  }
 
   return (
     <AuthContext.Provider value={{ user, login, register, logout }}>

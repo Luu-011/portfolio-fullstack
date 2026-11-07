@@ -1,19 +1,23 @@
-//Es la **sección "Servicios"**: usa el encabezado reutilizable y pinta una **lista** (`<ul>`) 
-// generada desde `SERVICES`, donde cada servicio es una **fila clicable** (un `<a href="#contacto">`) con título, 
-// descripción y una flecha ↗, de modo que **todo el servicio** lleva a la sección de contacto.
-
 import SectionHeader from '../common/SectionHeader'
 import { ArrowUpRight } from '../common/Icons'
 import { SERVICES } from '../../utils/constants'
+import { useFetch } from '../../hooks/useFetch'
+import { getServices } from '../../services/serviceService'
 
 export default function Services() {
+  const { data } = useFetch(getServices)
+  // Mientras carga, o si el backend no responde, se muestran los textos por defecto
+  const services = data?.length
+    ? data.map((s) => ({ title: s.title, text: s.description }))
+    : SERVICES
+
   return (
     <section id="servicios" className="section">
       <div className="container">
         <SectionHeader label="Qué puedo hacer" title="Servicios pensados para avanzar."
           text="Una colaboración flexible, con objetivos y entregables claros." />
         <ul className="service-list">
-          {SERVICES.map((s) => (
+          {services.map((s) => (
             <li key={s.title}>
               <a href="#contacto" className="service-row">
                 <span>

@@ -1,8 +1,3 @@
-//Es el formulario de contacto completo: valida 4 campos (nombre, email, select y mensaje), 
-// los envía a un servicio, gestiona 4 estados de envío (reposo, enviando, enviado, error), 
-// muestra el mensaje adecuado en cada estado y usa pequeños "ayudantes" 
-// (field y error) para no repetir atributos — todo con accesibilidad cuidada.
-
 import { useState } from 'react'
 import { Send } from '../common/Icons'
 import { CONTACT_TYPES } from '../../utils/constants'
@@ -22,6 +17,7 @@ export default function ContactForm() {
   const [values, setValues] = useState(initial)
   const [errors, setErrors] = useState({})
   const [status, setStatus] = useState('idle') // idle | sending | sent | error
+  const [serverError, setServerError] = useState('')
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -40,7 +36,8 @@ export default function ContactForm() {
       await sendContact({ ...values, name: values.name.trim(), email: values.email.trim(), message: values.message.trim() })
       setValues(initial)
       setStatus('sent')
-    } catch {
+    } catch (err) {
+      setServerError(err.message)
       setStatus('error')
     }
   }
@@ -85,7 +82,7 @@ export default function ContactForm() {
       <div className="form-footer">
         <p role="status" className={`form-note ${status === 'error' ? 'is-error' : ''}`}>
           {status === 'sent' && 'Consulta enviada. Te responderé por email.'}
-          {status === 'error' && 'No pudimos enviar la consulta. Intenta de nuevo en unos minutos.'}
+          {status === 'error' && (serverError || 'No pudimos enviar la consulta. Intenta de nuevo en unos minutos.')}
           {(status === 'idle' || status === 'sending') && 'Tu consulta queda registrada y te respondo por email.'}
         </p>
         <button type="submit" className="btn btn-brand" disabled={status === 'sending'}>
