@@ -9,6 +9,8 @@ const STAFF_LINKS = [
 // Solo el administrador ve estas secciones
 const ADMIN_LINKS = [
   { to: '/admin/estadisticas', label: 'Estadísticas' },
+  { to: '/admin/proyectos', label: 'Proyectos' },
+  { to: '/admin/servicios', label: 'Servicios' },
   { to: '/admin/usuarios', label: 'Usuarios' },
 ]
 

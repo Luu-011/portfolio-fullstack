@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { ArrowUpRight } from '../common/Icons'
 import DemoViewer from './DemoViewer'
+import { API_ORIGIN } from '../../services/api'
+import '../../styles/media.css'
 
 export default function ProjectDetail({ project }) {
   const [activeDemo, setActiveDemo] = useState(null)
@@ -11,6 +13,7 @@ export default function ProjectDetail({ project }) {
         <div>
           <h1>{project.title}</h1>
           <p className="lead-text">{project.summary}</p>
+          {project.image && <img className="project-hero" src={`${API_ORIGIN}${project.image}`} alt={`Imagen del proyecto ${project.title}`} />}
           <p>{project.description}</p>
         </div>
 

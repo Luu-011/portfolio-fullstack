@@ -22,14 +22,16 @@ export async function request(path, { method = 'GET', body } = {}) {
   const token = getToken()
   const headers = {}
   if (token) headers.Authorization = `Bearer ${token}`
-  if (body !== undefined) headers['Content-Type'] = 'application/json'
+  const isForm = typeof FormData !== 'undefined' && body instanceof FormData
+  // Con FormData el navegador pone solo el Content-Type (multipart) y su separador
+  if (body !== undefined && !isForm) headers['Content-Type'] = 'application/json'
 
   let res
   try {
     res = await fetch(`${API_URL}${path}`, {
       method,
       headers,
-      body: body !== undefined ? JSON.stringify(body) : undefined,
+      body: body === undefined ? undefined : isForm ? body : JSON.stringify(body),
     })
   } catch {
     throw new Error('No se pudo conectar con el servidor. Verifica que esté en funcionamiento.')

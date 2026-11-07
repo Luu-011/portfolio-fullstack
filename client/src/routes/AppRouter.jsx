@@ -13,6 +13,8 @@ import Dashboard from '../pages/admin/Dashboard'
 import Messages from '../pages/admin/Messages'
 import Analytics from '../pages/admin/Analytics'
 import Users from '../pages/admin/Users'
+import ProjectsCRUD from '../pages/admin/ProjectsCRUD'
+import ServicesCRUD from '../pages/admin/ServicesCRUD'
 
 export default function AppRouter() {
   return (
@@ -37,7 +39,8 @@ export default function AppRouter() {
             <Route element={<AdminRoute />}>
               <Route path="estadisticas" element={<Analytics />} />
               <Route path="usuarios" element={<Users />} />
-              {/* Parte 6B: proyectos y servicios (CRUD) */}
+              <Route path="proyectos" element={<ProjectsCRUD />} />
+              <Route path="servicios" element={<ServicesCRUD />} />
             </Route>
           </Route>
         </Route>

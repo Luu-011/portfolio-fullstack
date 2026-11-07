@@ -1,0 +1,21 @@
+/* Páginas de gestión de proyectos, demos y servicios */
+.panel { padding: 1.5rem; margin-bottom: 1.5rem; }
+.panel-head { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem; }
+.panel-head h2 { margin: 0; }
+.notice { background: rgba(222,203,183,.45); border-radius: 10px; padding: .6rem 1rem; font-size: .9rem; margin-bottom: 1rem; }
+.page-actions { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; margin: 1rem 0; }
+.row-actions { display: flex; gap: .5rem; justify-content: flex-end; flex-wrap: nowrap; }
+.thumb { width: 56px; height: 40px; object-fit: cover; border-radius: 8px; border: 1px solid var(--line); background: rgba(222,203,183,.35); flex: none; }
+.cell-project { display: flex; align-items: center; gap: .75rem; }
+.data-table .tags { min-width: 10rem; }
+
+.dropzone { display: block; padding: 1.25rem; text-align: center; border: 2px dashed var(--grey-olive); border-radius: 14px; cursor: pointer; font-size: .9rem; transition: background .2s, border-color .2s; }
+.dropzone:hover, .dropzone.is-dragging { background: rgba(222,203,183,.4); border-color: var(--deep-mocha); }
+.dropzone:focus-within { outline: 2px solid var(--heading); outline-offset: 3px; }
+.preview { display: flex; align-items: center; gap: 1rem; margin-bottom: .75rem; flex-wrap: wrap; }
+.preview img { width: 160px; height: 90px; object-fit: cover; border-radius: 10px; border: 1px solid var(--line); }
+
+.demo-admin { margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--line); }
+.demo-row { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: .8rem 0; border-bottom: 1px solid var(--line); }
+.demo-row .small-note { word-break: break-all; }
+.badge-status.is-off { background: transparent; color: var(--grey-olive); }
