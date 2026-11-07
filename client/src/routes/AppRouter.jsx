@@ -3,6 +3,7 @@ import Layout from '../components/layout/Layout'
 import AdminLayout from '../components/layout/AdminLayout'
 import ProtectedRoute from './ProtectedRoute'
 import OperatorRoute from './OperatorRoute'
+import AdminRoute from './AdminRoute'
 import Home from '../pages/public/Home'
 import Login from '../pages/public/Login'
 import Register from '../pages/public/Register'
@@ -10,6 +11,8 @@ import Projects from '../pages/user/Projects'
 import ProjectDetail from '../pages/user/ProjectDetail'
 import Dashboard from '../pages/admin/Dashboard'
 import Messages from '../pages/admin/Messages'
+import Analytics from '../pages/admin/Analytics'
+import Users from '../pages/admin/Users'
 
 export default function AppRouter() {
   return (
@@ -30,8 +33,12 @@ export default function AppRouter() {
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<Dashboard />} />
             <Route path="mensajes" element={<Messages />} />
-            {/* Más adelante, rutas solo para admin dentro de <AdminRoute />:
-                proyectos, servicios, usuarios, analytics */}
+            {/* Solo administrador */}
+            <Route element={<AdminRoute />}>
+              <Route path="estadisticas" element={<Analytics />} />
+              <Route path="usuarios" element={<Users />} />
+              {/* Parte 6B: proyectos y servicios (CRUD) */}
+            </Route>
           </Route>
         </Route>
 

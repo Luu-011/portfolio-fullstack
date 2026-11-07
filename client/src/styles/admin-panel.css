@@ -1,0 +1,19 @@
+/* Estilos de las páginas de estadísticas y usuarios del panel del administrador */
+.toolbar { display: flex; flex-wrap: wrap; gap: 1rem; margin: 1.25rem 0; }
+.toolbar label { display: flex; flex-direction: column; gap: .25rem; font-size: .85rem; font-weight: 700; color: var(--heading); }
+.toolbar .form-select, .toolbar .form-control { min-width: 11rem; padding: .45rem .75rem; }
+
+.chart-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.chart-card { margin: 0; padding: 1.25rem; min-width: 0; }
+.chart-wide { grid-column: 1 / -1; }
+.chart-card .subhead { font-size: 1.15rem; margin-bottom: .15rem; }
+.chart-card figcaption { margin-bottom: 1rem; }
+.ranking code { color: var(--heading); background: none; }
+@media (max-width: 991.98px) { .chart-grid { grid-template-columns: minmax(0, 1fr); } }
+
+.table-wrap { overflow-x: auto; }
+.data-table { width: 100%; border-collapse: collapse; font-size: .92rem; }
+.data-table th { text-align: left; font-size: .8rem; color: var(--heading); padding: .85rem 1rem; border-bottom: 1px solid var(--line); white-space: nowrap; }
+.data-table td { padding: .85rem 1rem; border-bottom: 1px solid var(--line); vertical-align: middle; }
+.data-table tr:last-child td { border-bottom: 0; }
+.data-table .form-select { min-width: 9.5rem; }

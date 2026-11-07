@@ -29,3 +29,14 @@ Endpoints:
 - Proyectos (admin): `POST /api/projects`, `PUT /api/projects/:id`, `DELETE /api/projects/:id` (multipart/form-data con campo `image` opcional: JPG, PNG o WebP, máx. 2 MB)
 - Demos (admin): `POST /api/projects/:id/demos`, `PUT` y `DELETE /api/projects/:id/demos/:demoId`
 - Imágenes: `GET /uploads/<archivo>`
+
+## Tanda 4 (analytics)
+- No suma paquetes: no hace falta `npm install`.
+- Opcional: ejecutá `database/seed_visits.sql` en Workbench para tener visitas de ejemplo en los gráficos.
+- `POST /api/visits` (público): { path } -> el frontend lo llama una vez por sesión del navegador.
+- Solo admin (header Authorization): `GET /api/analytics/summary`, `/visits-by-day?days=30`,
+  `/registrations?months=6`, `/contacts-by-type?days=90` (days opcional), `/top-pages?limit=5`
+
+## Parte 6A (usuarios)
+- Solo administrador: `GET /api/users` (opcional `?role=`), `PUT /api/users/:id/role` { role }, `DELETE /api/users/:id`
+- Ahora el rol se lee de la base en cada petición: borrar o cambiar el rol de un usuario rige de inmediato.

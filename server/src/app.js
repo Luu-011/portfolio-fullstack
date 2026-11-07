@@ -5,6 +5,9 @@ import authRoutes from './routes/authRoutes.js'
 import contactRoutes from './routes/contactRoutes.js'
 import projectRoutes from './routes/projectRoutes.js'
 import serviceRoutes from './routes/serviceRoutes.js'
+import visitRoutes from './routes/visitRoutes.js'
+import analyticsRoutes from './routes/analyticsRoutes.js'
+import userRoutes from './routes/userRoutes.js'
 import { UPLOADS_DIR } from './utils/images.js'
 import { notFound, errorHandler } from './middlewares/errorHandler.js'
 
@@ -40,6 +43,9 @@ app.use('/api/auth', authRoutes)
 app.use('/api/contacts', contactRoutes)
 app.use('/api/projects', projectRoutes)
 app.use('/api/services', serviceRoutes)
+app.use('/api/visits', visitRoutes)
+app.use('/api/analytics', analyticsRoutes)
+app.use('/api/users', userRoutes)
 
 app.use(notFound)
 app.use(errorHandler)
