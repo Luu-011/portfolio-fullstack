@@ -1,12 +1,15 @@
-//Es la sección "Sobre mí": usa el encabezado reutilizable, muestra un avatar con la inicial 
-// (oculto para lectores de pantalla) y una presentación personal en dos bloques,
-//  y termina con un enlace de ancla que salta a la sección de contacto.
-
+import { useRef } from 'react'
 import SectionHeader from '../common/SectionHeader'
+import { useScrollReveal } from '../../hooks/useScrollReveal'
 
 export default function About() {
+  const root = useRef(null)
+
+  // Los dos bloques aparecen escalonados al llegar con el scroll
+  useScrollReveal(root, '.about-intro, .about-text')
+
   return (
-    <section id="sobre-mi" className="section">
+    <section id="sobre-mi" className="section" ref={root}>
       <div className="container">
         <SectionHeader label="Un poco sobre mí" title="Tecnología útil, hecha con criterio."
           text="Un enfoque integral para construir experiencias digitales que se entienden y funcionan." />

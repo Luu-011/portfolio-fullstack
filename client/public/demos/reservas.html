@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reservas de turnos</title>
+<style>
+  :root{--bg:#f6f1f5;--ink:#3b2d2d;--muted:#7a6a6a;--line:#e5d9de;--brand:#3b2d2d;--accent:#b5838d;--ok:#2f6b4f;--err:#a23b3b}
+  *{box-sizing:border-box}
+  body{margin:0;padding:16px;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
+  h1{font-size:1.15rem;margin:0}
+  h2{font-size:1rem;margin:0 0 10px}
+  header{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;margin-bottom:14px}
+  .status{font-size:.85rem;padding:4px 10px;border-radius:99px;border:1px solid var(--line);background:#fff}
+  .status.ok{color:var(--ok)} .status.off{color:var(--err)}
+  .layout{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+  @media(max-width:760px){.layout{grid-template-columns:1fr}}
+  .panel{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px}
+  label{display:block;font-size:.85rem;font-weight:600;margin:10px 0 4px}
+  input,select,textarea{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:8px;font:inherit;background:#fff;color:var(--ink)}
+  input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));gap:6px;margin-top:8px}
+  .slot{padding:7px 0;border:1px solid var(--line);border-radius:8px;background:#fff;cursor:pointer;font:inherit;color:var(--ink)}
+  .slot[disabled]{opacity:.4;cursor:not-allowed;text-decoration:line-through}
+  .slot[aria-pressed=true]{background:var(--brand);color:#fff;border-color:var(--brand)}
+  .btn{padding:9px 14px;border:0;border-radius:8px;background:var(--brand);color:#fff;font:inherit;cursor:pointer;margin-top:14px;width:100%}
+  .btn:disabled{opacity:.4;cursor:not-allowed}
+  .btn.small{width:auto;margin:0;padding:5px 10px;background:#fff;color:var(--ink);border:1px solid var(--line)}
+  .field-err{color:var(--err);font-size:.8rem;min-height:1em}
+  .msg{margin-top:10px;font-size:.9rem;padding:8px 10px;border-radius:8px}
+  .msg.ok{background:#e8f3ec;color:var(--ok)} .msg.err{background:#f8e7e7;color:var(--err)}
+  .hint,.empty{color:var(--muted);font-size:.85rem}
+  .item{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}
+  .item:last-child{border-bottom:0}
+  .item small{color:var(--muted);display:block}
+  .item.cancelada{opacity:.5}
+  .badge{font-size:.75rem;color:var(--muted)}
+</style>
+</head>
+<body>
+<header>
+  <h1>Reservas de turnos</h1>
+  <span id="status" class="status" role="status">Conectando con la API…</span>
+</header>
+
+<div id="offline" class="panel" hidden>
+  <h2>La API no está corriendo</h2>
+  <p>Esta demo usa la API de reservas, que es un servicio aparte. Para iniciarla, desde la raíz del proyecto:</p>
+  <pre style="background:#f6f1f5;padding:10px;border-radius:8px;overflow:auto">cd demos-src\api-reservas-demo
+npm start</pre>
+  <p class="hint">Después recargá esta página. La API escucha en <span id="apiurl"></span>.</p>
+</div>
+
+<div class="layout" id="app" hidden>
+  <section class="panel" aria-labelledby="t-nueva">
+    <h2 id="t-nueva">Nueva reserva</h2>
+    <label for="fecha">Día (lunes a viernes)</label>
+    <input type="date" id="fecha">
+    <div class="field-err" id="e-fecha"></div>
+    <div id="slots" class="slots" role="group" aria-label="Horarios disponibles"></div>
+    <p class="hint" id="slot-hint">Elegí un día para ver los horarios.</p>
+
+    <label for="nombre">Nombre</label>
+    <input id="nombre" maxlength="80" autocomplete="name"><div class="field-err" id="e-nombre"></div>
+    <label for="email">Email</label>
+    <input id="email" type="email" maxlength="120" autocomplete="email"><div class="field-err" id="e-email"></div>
+    <label for="telefono">Teléfono (opcional)</label>
+    <input id="telefono" maxlength="20" autocomplete="tel"><div class="field-err" id="e-telefono"></div>
+    <label for="servicio">Servicio</label>
+    <select id="servicio">
+      <option value="consulta">Consulta</option>
+      <option value="control">Control</option>
+      <option value="vacunacion">Vacunación</option>
+    </select>
+    <label for="notas">Notas (opcional)</label>
+    <textarea id="notas" rows="2" maxlength="240"></textarea><div class="field-err" id="e-notas"></div>
+
+    <button class="btn" id="reservar" type="button">Reservar turno</button>
+    <div id="msg" role="status"></div>
+  </section>
+
+  <section class="panel" aria-labelledby="t-lista">
+    <h2 id="t-lista">Reservas</h2>
+    <div id="lista"></div>
+  </section>
+</div>
+
+<script>
+// Dirección de la API de reservas. Cambiala si la corrés en otro puerto.
+const API = "http://localhost:3000/api";
+document.getElementById("apiurl").textContent = API;
+
+const $ = (id) => document.getElementById(id);
+const CAMPOS = ["fecha", "nombre", "email", "telefono", "notas"];
+let horaElegida = null;
+
+const pad = (n) => String(n).padStart(2, "0");
+const iso = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+
+async function api(ruta, opciones) {
+  const r = await fetch(API + ruta, {
+    ...opciones,
+    headers: { "Content-Type": "application/json" },
+  });
+  const cuerpo = await r.json().catch(() => ({}));
+  if (!r.ok) throw Object.assign(new Error(cuerpo.mensaje || "Error"), { cuerpo, status: r.status });
+  return cuerpo;
+}
+
+function mostrarMensaje(texto, tipo) {
+  const m = $("msg");
+  m.className = "msg " + tipo;
+  m.textContent = texto;
+}
+
+function limpiarErrores() {
+  CAMPOS.forEach((c) => ($("e-" + c).textContent = ""));
+  $("msg").className = "";
+  $("msg").textContent = "";
+}
+
+async function cargarHorarios() {
+  const fecha = $("fecha").value;
+  horaElegida = null;
+  const cont = $("slots");
+  cont.innerHTML = "";
+  if (!fecha) { $("slot-hint").textContent = "Elegí un día para ver los horarios."; return; }
+  try {
+    const d = await api("/disponibilidad?fecha=" + encodeURIComponent(fecha));
+    if (!d.atiende) { $("slot-hint").textContent = "Ese día no se atiende. Elegí de lunes a viernes."; return; }
+    $("slot-hint").textContent = "Elegí un horario.";
+    d.horarios.forEach((h) => {
+      const b = document.createElement("button");
+      b.type = "button"; b.className = "slot"; b.textContent = h.hora;
+      b.disabled = !h.disponible;
+      b.setAttribute("aria-pressed", "false");
+      b.onclick = () => {
+        horaElegida = h.hora;
+        cont.querySelectorAll(".slot").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+      };
+      cont.appendChild(b);
+    });
+  } catch (e) {
+    $("slot-hint").textContent = e.cuerpo?.detalles?.[0]?.mensaje || "No se pudieron cargar los horarios.";
+  }
+}
+
+async function cargarLista() {
+  const cont = $("lista");
+  try {
+    const d = await api("/reservas?limit=50");
+    cont.innerHTML = "";
+    if (!d.datos.length) { cont.innerHTML = '<p class="empty">Todavía no hay reservas. Creá la primera.</p>'; return; }
+    d.datos.forEach((r) => {
+      const fila = document.createElement("div");
+      fila.className = "item" + (r.estado === "cancelada" ? " cancelada" : "");
+      const info = document.createElement("div");
+      const t = document.createElement("strong");
+      t.textContent = `${r.fecha} · ${r.hora} · ${r.servicio}`;
+      const s = document.createElement("small");
+      s.textContent = `${r.nombre} (${r.email})`;
+      info.append(t, s);
+      fila.appendChild(info);
+      if (r.estado === "confirmada") {
+        const b = document.createElement("button");
+        b.className = "btn small"; b.type = "button"; b.textContent = "Cancelar";
+        b.onclick = async () => {
+          b.disabled = true;
+          try { await api("/reservas/" + r.id, { method: "DELETE" }); } catch (e) {}
+          await Promise.all([cargarLista(), cargarHorarios()]);
+        };
+        fila.appendChild(b);
+      } else {
+        const bd = document.createElement("span");
+        bd.className = "badge"; bd.textContent = "Cancelada";
+        fila.appendChild(bd);
+      }
+      cont.appendChild(fila);
+    });
+  } catch (e) {
+    cont.innerHTML = '<p class="empty">No se pudo cargar la lista.</p>';
+  }
+}
+
+$("reservar").onclick = async () => {
+  limpiarErrores();
+  if (!horaElegida) {
+    mostrarMensaje("Elegí un día y un horario antes de reservar.", "err");
+    return;
+  }
+  const datos = {
+    nombre: $("nombre").value.trim(),
+    email: $("email").value.trim(),
+    servicio: $("servicio").value,
+    fecha: $("fecha").value,
+    hora: horaElegida,
+  };
+  const tel = $("telefono").value.trim(), notas = $("notas").value.trim();
+  if (tel) datos.telefono = tel;
+  if (notas) datos.notas = notas;
+
+  $("reservar").disabled = true;
+  try {
+    const r = await api("/reservas", { method: "POST", body: JSON.stringify(datos) });
+    mostrarMensaje(`Reserva confirmada para el ${r.fecha} a las ${r.hora}.`, "ok");
+    ["nombre", "email", "telefono", "notas"].forEach((c) => ($(c).value = ""));
+  } catch (e) {
+    (e.cuerpo?.detalles || []).forEach((d) => { if ($("e-" + d.campo)) $("e-" + d.campo).textContent = d.mensaje; });
+    mostrarMensaje(e.cuerpo?.mensaje || "No se pudo crear la reserva.", "err");
+  } finally {
+    $("reservar").disabled = false;
+    await Promise.all([cargarLista(), cargarHorarios()]);
+  }
+};
+
+$("fecha").addEventListener("change", cargarHorarios);
+
+(async function iniciar() {
+  const hoy = new Date(), max = new Date();
+  max.setDate(max.getDate() + 60);
+  $("fecha").min = iso(hoy);
+  $("fecha").max = iso(max);
+  try {
+    await api("/health");
+    $("status").textContent = "API conectada"; $("status").classList.add("ok");
+    $("app").hidden = false;
+    cargarLista();
+  } catch (e) {
+    $("status").textContent = "API desconectada"; $("status").classList.add("off");
+    $("offline").hidden = false;
+  }
+})();
+</script>
+</body>
+</html>

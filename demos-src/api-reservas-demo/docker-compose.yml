@@ -1,0 +1,14 @@
+# MySQL listo para la demo:  docker compose up -d
+services:
+  db:
+    image: mysql:8.4
+    environment:
+      MYSQL_ROOT_PASSWORD: reservas
+      MYSQL_DATABASE: reservas
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:

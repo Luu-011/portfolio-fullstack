@@ -1,14 +1,48 @@
-//Es la **sección "Hero" (portada principal)**: a la izquierda muestra una píldora de disponibilidad, 
-// un titular grande con acento, un texto descriptivo y dos botones de ancla ("Hablemos" → contacto, "Ver proyectos" → proyectos); 
-// a la derecha, una **tarjeta decorativa tipo "ventana de código"** 
-// (oculta a lectores de pantalla) con puntos de ventana, el dominio del sitio, un bloque de código y un "orbit" con chips UI/API/DB.
-
+import { useEffect, useRef } from 'react'
+import gsap from 'gsap'
 import { ArrowUpRight, ArrowDown, Code } from '../common/Icons'
 import { SITE } from '../../utils/constants'
 
 export default function Hero() {
+  const root = useRef(null)
+
+  useEffect(() => {
+    // gsap.matchMedia respeta "reducir movimiento" del sistema operativo
+    const mm = gsap.matchMedia()
+
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
+      const ctx = gsap.context(() => {
+        // Entrada escalonada del texto
+        const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
+        tl.from('.status-pill', { y: 16, autoAlpha: 0, duration: 0.5 })
+          .from('.hero .eyebrow', { y: 16, autoAlpha: 0, duration: 0.5 }, '-=0.3')
+          .from('.hero h1', { y: 40, autoAlpha: 0, duration: 0.8 }, '-=0.3')
+          .from('.hero .lead-text', { y: 24, autoAlpha: 0, duration: 0.6 }, '-=0.5')
+          .from('.hero .btn', { y: 20, autoAlpha: 0, duration: 0.5, stagger: 0.12 }, '-=0.4')
+          // La tarjeta entra desde la derecha, en paralelo con el texto
+          .from('.hero-card', { x: 60, autoAlpha: 0, duration: 0.9 }, 0.3)
+          // Los chips solo cambian opacidad para no pisar su posición en CSS
+          .from('.orbit .chip', { autoAlpha: 0, duration: 0.5, stagger: 0.15 }, '-=0.2')
+
+        // Flotación suave de la tarjeta (solo eje y, no choca con la entrada en x)
+        gsap.to('.hero-card', {
+          y: -10,
+          duration: 3,
+          ease: 'sine.inOut',
+          repeat: -1,
+          yoyo: true,
+          delay: 1.2,
+        })
+      }, root)
+
+      return () => ctx.revert()
+    })
+
+    return () => mm.revert()
+  }, [])
+
   return (
-    <section className="hero">
+    <section className="hero" ref={root}>
       <div className="container">
         <div className="row align-items-center g-5">
           <div className="col-lg-6">

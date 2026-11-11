@@ -1,0 +1,57 @@
+# Pedidos de ejemplo para la extensión "REST Client" de VS Code.
+# Cambiá @fecha por un día hábil (lunes a viernes) que todavía no haya pasado.
+
+@base = http://localhost:3000/api
+@fecha = 2027-03-15
+
+### Estado del servicio
+GET {{base}}/health
+
+### Horarios libres del día
+GET {{base}}/disponibilidad?fecha={{fecha}}
+
+### Crear una reserva
+POST {{base}}/reservas
+Content-Type: application/json
+
+{
+  "nombre": "Ana Pérez",
+  "email": "ana@correo.com",
+  "telefono": "+54 387 555-1234",
+  "servicio": "consulta",
+  "fecha": "{{fecha}}",
+  "hora": "10:00",
+  "notas": "Primera vez"
+}
+
+### Crear con datos inválidos (devuelve 400 con el detalle por campo)
+POST {{base}}/reservas
+Content-Type: application/json
+
+{
+  "nombre": "A",
+  "email": "no-es-un-email",
+  "servicio": "peluqueria",
+  "fecha": "2027-02-31",
+  "hora": "10:15"
+}
+
+### Listar todas
+GET {{base}}/reservas
+
+### Listar con filtros y paginación
+GET {{base}}/reservas?fecha={{fecha}}&estado=confirmada&limit=10&offset=0
+
+### Ver una reserva
+GET {{base}}/reservas/1
+
+### Reprogramar
+PATCH {{base}}/reservas/1
+Content-Type: application/json
+
+{
+  "hora": "11:30"
+}
+
+### Cancelar
+DELETE {{base}}/reservas/1

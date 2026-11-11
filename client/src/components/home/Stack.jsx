@@ -1,15 +1,17 @@
-//Es la **sección "Stack" (herramientas)**: usa el encabezado reutilizable y pinta una **rejilla de tarjetas** 
-// (4 por fila en escritorio, 2 en tablet, apiladas en móvil) generada desde `STACK`, 
-// donde cada tarjeta muestra un icono de código, el nombre de un grupo de tecnologías 
-// y una **lista de etiquetas** (`<ul className="tags">`) con las herramientas de ese grupo.
-
+import { useRef } from 'react'
 import SectionHeader from '../common/SectionHeader'
 import { Code } from '../common/Icons'
 import { STACK } from '../../utils/constants'
+import { useScrollReveal } from '../../hooks/useScrollReveal'
 
 export default function Stack() {
+  const root = useRef(null)
+
+  // Las tarjetas aparecen escalonadas al llegar con el scroll
+  useScrollReveal(root, '.stack-card')
+
   return (
-    <section id="stack" className="section">
+    <section id="stack" className="section" ref={root}>
       <div className="container">
         <SectionHeader label="Herramientas" title="Un stack para ir de punta a punta."
           text="Tecnologías elegidas según el problema, no por moda." />
@@ -30,4 +32,3 @@ export default function Stack() {
     </section>
   )
 }
-

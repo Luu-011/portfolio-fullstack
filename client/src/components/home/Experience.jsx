@@ -1,14 +1,17 @@
-//Es la **sección "Cómo trabajo"**: usa el encabezado reutilizable y pinta una **lista ordenada y numerada** (`<ol>`)
-//  generada automáticamente desde el array `PROCESS`, 
-// donde cada paso muestra su número (`01`, `02`…), su título y su descripción.
-
+import { useRef } from 'react'
 import SectionHeader from '../common/SectionHeader'
 import { PROCESS } from '../../utils/constants'
+import { useScrollReveal } from '../../hooks/useScrollReveal'
 
 // Proceso de trabajo (secuencia real, por eso se numera)
 export default function Experience() {
+  const root = useRef(null)
+
+  // Los pasos aparecen uno tras otro al llegar con el scroll
+  useScrollReveal(root, '.process li')
+
   return (
-    <section id="proceso" className="section">
+    <section id="proceso" className="section" ref={root}>
       <div className="container">
         <SectionHeader label="Cómo trabajo" title="De la pregunta al producto."
           text="Un proceso colaborativo para que cada decisión tenga un propósito." />
