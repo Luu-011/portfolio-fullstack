@@ -105,7 +105,7 @@ textarea.form-control { resize: vertical; min-height: 130px; }
 
 .about-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 2.5rem; padding-top: 2rem; border-top: 1px solid var(--line); }
 .about-intro { display: flex; gap: 1.25rem; font-size: 1.15rem; color: var(--heading); font-weight: 500; }
-.avatar { flex: none; width: 48px; height: 48px; display: grid; place-items: center; border-radius: 12px; background: var(--pale-oak); font-family: var(--font-title); font-weight: 800; color: var(--deep-mocha); }
+.avatar { flex: none; width: 20x; height: 140px; display: grid; place-items: center; border-radius: 12px; background: var(--pale-oak); font-family: var(--font-title); font-weight: 800; color: var(--deep-mocha); }
 @media (max-width: 767.98px) { .about-grid { grid-template-columns: 1fr; } }
 
 .stack-card { padding: 1.4rem; height: 100%; }
@@ -230,3 +230,26 @@ textarea.form-control { resize: vertical; min-height: 130px; }
 .reply { padding: .9rem 1.1rem; border-radius: 12px; background: rgba(222,203,183,.35); }
 .reply-meta { font-size: .78rem; }
 @media (max-width: 991.98px) { .messages-layout { grid-template-columns: 1fr; } .msg-list { max-height: 320px; } }
+
+.stack-card .stack-img {
+  display: block;
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+}
+body {
+  background-color: #fcf8f7; /* O el color de fondo claro que usen tus tarjetas/secciones */
+  background-image: none;
+}
+
+/* 2. Aplica la imagen de fondo únicamente a la sección de inicio (Hero) */
+/* (Asegúrate de que tu sección de inicio tenga una clase como .hero o .hero-section, 
+   o el id/clase exacto que envuelve la primera pantalla) */
+.hero, section:first-of-type {
+  background-image: url('../assets/FondoCompleto.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}

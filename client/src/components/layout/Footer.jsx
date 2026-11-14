@@ -16,7 +16,7 @@ export default function Footer() {
           <Link to="/login" className="footer-operator"><Shield /> Acceso de operador</Link>
         </div>
         <div className="footer-bottom">
-          <span>© {new Date().getFullYear()} NombreTech</span>
+          <span>© {new Date().getFullYear()} CaneloTech</span>
           <a href="#inicio">Volver arriba ↑</a>
         </div>
       </div>

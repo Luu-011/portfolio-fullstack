@@ -1,6 +1,6 @@
 // Contenido editable del sitio: cambia aquí textos, stack y servicios.
 export const SITE = {
-  brandFirst: 'Nombre',
+  brandFirst: 'Canelo',
   brandSecond: 'Tech',
   email: 'tu-correo@gmail.com',
   domain: 'nombretech.dev',

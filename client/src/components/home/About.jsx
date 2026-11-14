@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import SectionHeader from '../common/SectionHeader'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
+import perfil from '../../assets/canelo.jpeg'
 
 export default function About() {
   const root = useRef(null)
@@ -15,8 +16,8 @@ export default function About() {
           text="Un enfoque integral para construir experiencias digitales que se entienden y funcionan." />
         <div className="about-grid">
           <div className="about-intro">
-            <span className="avatar" aria-hidden="true">N.</span>
-            <p>Hola, soy <strong>NombreTech</strong>. Me interesa resolver problemas reales con
+            <img className="avatar avatar-img" src={perfil} alt="Foto de perfil de CaneloTech" width="140" height="500" />
+            <p>Hola, soy <strong>CaneloTech</strong>. Me interesa resolver problemas reales con
               productos digitales claros, accesibles y bien construidos.</p>
           </div>
           <div className="about-text">

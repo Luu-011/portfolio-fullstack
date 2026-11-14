@@ -3,6 +3,7 @@ import { Send } from '../common/Icons'
 import { CONTACT_TYPES } from '../../utils/constants'
 import { validateName, validateEmail, validateMessage, validateSelect } from '../../utils/validators'
 import { sendContact } from '../../services/contactService'
+import bgForm from '../../assets/fondo1.jpeg'
 
 const initial = { name: '', email: '', type: CONTACT_TYPES[0], message: '' }
 
@@ -53,7 +54,17 @@ export default function ContactForm() {
   )
 
   return (
-    <form className="card-soft contact-form" onSubmit={handleSubmit} noValidate>
+    <form
+      className="card-soft contact-form"
+      onSubmit={handleSubmit}
+      noValidate
+      style={{
+        backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), url(${bgForm})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+      }}
+    >
       <div className="row g-3">
         <div className="col-md-6">
           <label htmlFor="contact-name" className="form-label">Tu nombre</label>

@@ -1,8 +1,19 @@
 import { useRef } from 'react'
 import SectionHeader from '../common/SectionHeader'
-import { Code } from '../common/Icons'
 import { STACK } from '../../utils/constants'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
+import imgFrontend from '../../assets/front.jpeg'
+import imgBackend from '../../assets/back.jpeg'
+import imgDatos from '../../assets/datos.jpeg'
+import imgHerramientas from '../../assets/herramientas.jpeg'
+
+// La clave tiene que coincidir exactamente con el título de cada grupo en STACK
+const IMAGENES = {
+  Frontend: imgFrontend,
+  Backend: imgBackend,
+  Datos: imgDatos,
+  Herramientas: imgHerramientas,
+}
 
 export default function Stack() {
   const root = useRef(null)
@@ -19,7 +30,16 @@ export default function Stack() {
           {STACK.map((group) => (
             <div className="col-sm-6 col-lg-3" key={group.title}>
               <article className="card-soft stack-card">
-                <Code className="stack-icon" />
+                {IMAGENES[group.title] && (
+                  <img
+                    className="stack-img"
+                    src={IMAGENES[group.title]}
+                    alt=""
+                    width="400"
+                    height="160"
+                    loading="lazy"
+                  />
+                )}
                 <h3>{group.title}</h3>
                 <ul className="tags">
                   {group.items.map((i) => <li key={i}>{i}</li>)}
